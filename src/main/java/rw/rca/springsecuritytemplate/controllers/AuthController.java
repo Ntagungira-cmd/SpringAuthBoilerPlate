@@ -1,6 +1,5 @@
 package rw.rca.springsecuritytemplate.controllers;
 
-import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
