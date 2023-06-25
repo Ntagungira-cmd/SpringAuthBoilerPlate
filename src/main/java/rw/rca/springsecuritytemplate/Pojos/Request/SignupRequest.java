@@ -1,7 +1,7 @@
 package rw.rca.springsecuritytemplate.Pojos.Request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Set;

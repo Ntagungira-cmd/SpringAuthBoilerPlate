@@ -1,6 +1,6 @@
 package rw.rca.springsecuritytemplate.controllers;
 
-import jakarta.validation.Valid;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -23,6 +23,7 @@ import rw.rca.springsecuritytemplate.Repositories.UserRepository;
 import rw.rca.springsecuritytemplate.Security.Jwt.JwtUtils;
 import rw.rca.springsecuritytemplate.Security.UserDetailsImpl;
 
+import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

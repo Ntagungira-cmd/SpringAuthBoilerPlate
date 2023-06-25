@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import rw.rca.springsecuritytemplate.Models.User;
 import rw.rca.springsecuritytemplate.Repositories.UserRepository;
 import rw.rca.springsecuritytemplate.Security.UserDetailsImpl;
+import javax.transaction.Transactional;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -15,6 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()->new UsernameNotFoundException("User with username "+username+" not found"));

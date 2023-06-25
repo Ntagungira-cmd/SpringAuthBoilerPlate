@@ -1,6 +1,6 @@
 package rw.rca.springsecuritytemplate.Models;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Data;
 import rw.rca.springsecuritytemplate.Enums.ERole;
 
