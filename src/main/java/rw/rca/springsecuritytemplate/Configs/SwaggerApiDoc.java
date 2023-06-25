@@ -11,7 +11,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.*;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.paths.RelativePathProvider;
@@ -30,7 +33,7 @@ import java.util.List;
 @EnableWebMvc
 public class SwaggerApiDoc extends WebMvcConfigurationSupport {
 
-
+    @Autowired
     private final ServletContext servletContext;
 
     @Autowired
@@ -76,46 +79,31 @@ public class SwaggerApiDoc extends WebMvcConfigurationSupport {
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .directModelSubstitute(LocalDate.class, Date.class)
+        return new Docket(DocumentationType.SWAGGER_2).directModelSubstitute(LocalDate.class, Date.class)
                 .host(host)
                 .pathProvider(new RelativePathProvider(servletContext) {
                     @Override
                     public String getApplicationBasePath() {
                         return "";
                     }
-                })
-                .select()
-                .apis(RequestHandlerSelectors.basePackage(baseControllerPath))
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(apiInfo())
-                .securitySchemes(Arrays.asList(cookieAuth()))
+                }).select().apis(RequestHandlerSelectors.basePackage(baseControllerPath))
+                .paths(PathSelectors.any()).build().apiInfo(apiInfo()).securitySchemes(Arrays.asList(apiKey()))
                 .securityContexts(Collections.singletonList(securityContext()));
     }
 
-    private SecurityScheme cookieAuth() {
-        return new ApiKey("CookieAuth", "Cookie", "header");
+    private ApiKey apiKey() {
+        return new ApiKey("Bearer", "Authorization", "header");
     }
 
-
-//    private ApiKey apiKey() {
-//        return new ApiKey("Bearer", "Authorization", "header");
-//    }
-
     private SecurityContext securityContext() {
-        return SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.regex("/.*"))
-                .build();
+        return SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.regex("/.*")).build();
     }
 
     private List<SecurityReference> defaultAuth() {
         final AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         final AuthorizationScope[] authorizationScopes = new AuthorizationScope[]{authorizationScope};
-        return Collections.singletonList(new SecurityReference("CookieAuth", authorizationScopes));
+        return Collections.singletonList(new SecurityReference("Bearer", authorizationScopes));
     }
-
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder().title(appName).description(appDescription)
